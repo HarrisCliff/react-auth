@@ -1,11 +1,13 @@
+import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./components/Navbar";
 import "./index.css";
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Post from "./pages/Post";
 
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import Register from "./pages/Register";
 
 function App() {
   const [user, setUser] = useState(null);
@@ -45,6 +47,10 @@ function App() {
           <Route
             path="/login"
             element={user ? <Navigate to="/" /> : <Login />}
+          />
+          <Route
+            path="/register"
+            element={user ? <Navigate to="/" /> : <Register />}
           />
           <Route
             path="/post/:id"

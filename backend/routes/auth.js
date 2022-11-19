@@ -1,7 +1,13 @@
 const router = require("express").Router();
 const passport = require("passport");
+const { register, login } = require("../Controllers/AuthControllers");
+const { checkUser } = require("../Middleware/AuthMiddlewares");
 
 const CLIENT_URL = "http://localhost:3000/";
+
+router.post("/", checkUser);
+router.post("/register", register);
+router.post("/login", login);
 
 router.get("/login/success", (req, res) => {
   if (req.user) {

@@ -1,7 +1,6 @@
-/* This example requires Tailwind CSS v2.0+ */
-import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 
 const navigation = [
@@ -47,7 +46,7 @@ export default function Example({ user }) {
                 <Link to="/">
                   <img
                     className="hidden lg:block h-8 w-auto"
-                    src="https://cdn.icon-icons.com/icons2/3484/PNG/128/user_interface_message_ui_chat_icon_220214.png"
+                    src="https://tailwindui.com/img/logos/workflow-mark-indigo-500.svg"
                     alt="Workflow"
                   />
                 </Link>

@@ -3,10 +3,9 @@ import React, { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
-import FbIcon from "../assets/icons8-facebook-48.png";
 import GoogleIcon from "../assets/icons8-google-48.png";
 
-const Login = () => {
+const Register = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState({
     username: "",
@@ -19,12 +18,12 @@ const Login = () => {
       position: "top-right",
     });
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/login",
+        "http://localhost:5000/register",
         {
           ...values,
         },
@@ -34,15 +33,16 @@ const Login = () => {
       );
       if (data) {
         if (data.errors) {
-          const { email, password } = data.errors;
-          if (email) generateError(email);
+          const { username, email, password } = data.errors;
+          if (username) generateError(username);
+          else if (email) generateError(email);
           else if (password) generateError(password);
         } else {
-          navigate("/");
+          navigate("/login");
         }
       }
-    } catch (ex) {
-      console.log(ex);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -57,7 +57,7 @@ const Login = () => {
       <ToastContainer />
       <div className="min-w-screen flex min items-center justify-center px-5 py-5">
         <section class="flex flex-col md:flex-row bg-gray-100 text-gray-500 rounded-3xl shadow-xl w-full overflow-hidden max-w-[1000px]">
-          <div class="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-1/2 h-screen">
+          <div class="bg-indigo-600 hidden lg:block w-full md:w-1/2 xl:w-2/3 h-screen">
             <img
               src="https://source.unsplash.com/random"
               alt=""
@@ -66,27 +66,41 @@ const Login = () => {
           </div>
 
           <div
-            class="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/2 h-screen px-6 lg:px-16 xl:px-12
+            class="bg-white w-full md:max-w-md lg:max-w-full md:mx-auto md:mx-0 md:w-1/2 xl:w-1/3 h-screen px-6 lg:px-16 xl:px-12
         flex items-center justify-center"
           >
             <div class="w-full h-100">
-              <h1 class="text-xl md:text-2xl font-bold leading-tight mt-12">
+              <h1 class="text-xl pb-3 md:text-2xl font-bold leading-tight mt-6">
                 Log in to your account
               </h1>
 
-              <form className="mt-6" onSubmit={(e) => handleSubmit(e)}>
-                <div>
+              <form onSubmit={(e) => handleSubmit(e)}>
+                <div className="">
+                  <label class="block text-gray-700">Username</label>
+                  <input
+                    type="text"
+                    name="username"
+                    placeholder="Enter Username"
+                    class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
+                    autofocus
+                    autocomplete
+                    onChange={(e) =>
+                      setValues({ ...values, [e.target.name]: e.target.value })
+                    }
+                  />
+                </div>
+                <div className="mt-4">
                   <label class="block text-gray-700">Email Address</label>
                   <input
                     type="email"
                     name="email"
-                    onChange={(e) =>
-                      setValues({ ...values, [e.target.name]: e.target.value })
-                    }
                     placeholder="Enter Email Address"
                     class="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                     autofocus
                     autocomplete
+                    onChange={(e) =>
+                      setValues({ ...values, [e.target.name]: e.target.value })
+                    }
                   />
                 </div>
 
@@ -96,16 +110,16 @@ const Login = () => {
                     <input
                       type="password"
                       name="password"
+                      placeholder="Enter Password"
+                      minlength="6"
+                      class="w-full  px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
+                  focus:bg-white focus:outline-none"
                       onChange={(e) =>
                         setValues({
                           ...values,
                           [e.target.name]: e.target.value,
                         })
                       }
-                      placeholder="Enter Password"
-                      minlength="6"
-                      class="w-full  px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
-                focus:bg-white focus:outline-none"
                     />
                     <div class="absolute right-3 top-6 cursor-pointer">
                       <FaEye />
@@ -124,10 +138,10 @@ const Login = () => {
 
                 <button
                   type="submit"
-                  class="w-full block bg-indigo-500 hover:bg-indigo-400 focus:bg-indigo-400 text-white font-semibold rounded-lg
+                  class="w-full block bg-indigo-500 hover:bg-[#1f2937] transition delay-75 text-white font-semibold rounded-lg
               px-4 py-3 mt-6"
                 >
-                  Log In
+                  Sign up
                 </button>
               </form>
               <hr class="my-6 border-gray-300 w-full" />
@@ -141,24 +155,14 @@ const Login = () => {
                   <span class="ml-4">Log in with Google</span>
                 </div>
               </button>
-              {/* <button
-                type="button"
-                class="w-full block bg-white hover:bg-gray-100 focus:bg-gray-100 text-gray-900 font-semibold rounded-lg px-4 py-3 border border-gray-300"
-                onClick={facebook}
-              >
-                <div class="flex items-center justify-center">
-                  <img src={FbIcon} width={22} alt="" />
-                  <span class="ml-4">Log in with Facebook</span>
-                </div>
-              </button> */}
 
-              <p class="mt-8 mb-5">
-                Need an account?{" "}
+              <p class="mt-2 mb-5">
+                Already have an account?{" "}
                 <a
-                  href="/register"
+                  href="/login"
                   class="text-blue-500 hover:text-blue-700 font-semibold"
                 >
-                  Create an account
+                  Sign In
                 </a>
               </p>
             </div>
@@ -169,4 +173,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Register;

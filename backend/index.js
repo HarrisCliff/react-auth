@@ -3,8 +3,10 @@ const express = require("express");
 const cors = require("cors");
 const passportSetup = require("./passport");
 const passport = require("passport");
-const authRoute = require("./routes/auth");
+const authRoute = require("./Routes/auth");
 const app = express();
+const mongoose = require("mongoose");
+const cookieParser = require("cookie-parser");
 
 app.use(
   cookieSession({
@@ -25,8 +27,22 @@ app.use(
   })
 );
 
+app.use(cookieParser());
+app.use(express.json());
+
+app.use("/", authRoute);
 app.use("/auth", authRoute);
 
-app.listen("5000", () => {
-  console.log("Server is running on port 5000");
-});
+const CONNECTION_URL =
+  "mongodb+srv://HarrisCliff:Madaliso7595@cluster0.s0vrzkx.mongodb.net/?retryWrites=true&w=majority";
+
+const PORT = process.env.PORT || 5000;
+
+mongoose
+  .connect(CONNECTION_URL, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() =>
+    app.listen(PORT, () =>
+      console.log(`Db connected and Server running on port ${PORT}`)
+    )
+  )
+  .catch((error) => console.log(error.message));
