@@ -2,7 +2,8 @@ const passport = require("passport");
 
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 
-const FacebookStrategy = require("passport-facebook").Strategy;
+const User = require('./Models/UserModel');
+
 
 FACEBOOK_APP_ID = "600855098073196";
 FACEBOOK_APP_SECRET = "80244498d0334cf4172e833558f0afc1";
@@ -20,22 +21,17 @@ passport.use(
     },
     function (accessToken, refreshToken, profile, done) {
       done(null, profile);
+      // new User ({
+      //   username: profile.displayName,
+      //   email:profile.emails,
+      //   googleID: profile.id
+      // }).save().then((newUser) => {
+      //   console.log('New user created:' + newUser)
+      // })
     }
   )
 );
 
-passport.use(
-  new FacebookStrategy(
-    {
-      clientID: FACEBOOK_APP_ID,
-      clientSecret: FACEBOOK_APP_SECRET,
-      callbackURL: "/auth/facebook/callback",
-    },
-    function (accessToken, refreshToken, profile, done) {
-      done(null, profile);
-    }
-  )
-);
 
 passport.serializeUser((user, done) => {
   done(null, user);
